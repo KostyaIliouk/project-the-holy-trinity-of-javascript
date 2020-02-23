@@ -25,10 +25,13 @@ A web app for getting the most recent news for each country. Users can explore a
 - GraphQL
 - React
 - Twitter API
-- Google Maps API(?)
+- Maps API (?)
+  - GoogleMaps
+  - Leaflet
+  - Polymaps
 
 ## Challenges
-- If using Google Maps API, integrating with Twitter would be a challenge to make seemless.
+- If using Map API, integrating with Twitter would be a challenge to make seemless.
 - Making our end product visually appealing but maximizing functionality - focus on UX as opposed to UI.
 - Not all of us are proficient in frontend frameworks, so we would have to get comfortable in working with React.
 - How often to fetch data from Twitter to update our news lists
