@@ -29,7 +29,8 @@ A web app for getting the most recent news for each country. Users can explore a
 
 ## Challenges
 - If using Google Maps API, integrating with Twitter would be a challenge to make seemless.
-- Ensuring a proper divide of work as each team member has heavy workload - outside of CSCC09.
 - Making our end product visually appealing but maximizing functionality - focus on UX as opposed to UI.
-- Not all of us are proficient in frontend frameworks, so we would have to get confortable in working with React.
+- Not all of us are proficient in frontend frameworks, so we would have to get comfortable in working with React.
+- How often to fetch data from Twitter to update our news lists
+- How to space apart data loading for individual countries such that the user is not hit with a very long loading screen for each data fetch 
 
