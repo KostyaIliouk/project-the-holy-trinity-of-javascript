@@ -1,0 +1,26 @@
+{
+  "name": "trendmap",
+  "version": "0.0.0",
+  "description": "Shows trending news per country.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UTSCC09/project-the-holy-trinity-of-javascript.git"
+  },
+  "keywords": [
+    "news",
+    "map"
+  ],
+  "author": "Mohammad Moustafa, Kanstantsin Ilioukevitch, Hassamoddin Sharifpour",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UTSCC09/project-the-holy-trinity-of-javascript/issues"
+  },
+  "homepage": "https://github.com/UTSCC09/project-the-holy-trinity-of-javascript#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
