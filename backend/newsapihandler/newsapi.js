@@ -15,7 +15,7 @@ file.readFile('./newsapihandler/secret/api.key')
         console.error(err);
 });
 
-file.readFile(`./middleware/files/newsapi-support-files.json`)
+file.readFile(`./newsapihandler/files/newsapi-support-files.json`)
     .then(function(value){
         newsapi.support = JSON.parse(value);
     }, function(err){
@@ -29,7 +29,8 @@ exports.getHeadlines = function(req, res, next){
     newsapi.api.v2.topHeadlines({
         country: newsapi.support[req.query.country]
     }).then(function(result){
-        return res.json(result);
+        res.locals.newsapiresult = result;
+        next();
     }, function(err){
         console.error(err);
         return res.status(500).end("internal server error");

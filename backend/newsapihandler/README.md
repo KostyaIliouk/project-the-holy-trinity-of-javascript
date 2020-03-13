@@ -3,6 +3,13 @@
 ## GET
 
  - GET /newsapi/topHeadlines
-   - query:
-     - country: [alpha-2 code]
-       - Not all countries are supported. Only the following are supported: ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu, id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk, th, tr, tw, ua, us, ve, za.
+   - request
+     - query string:
+       - country: country_name
+         - Not all countries are supported.
+           Please view `./files/newsapi-support-files.json` to view supported country names.
+   - response:
+     - status: 500
+       - backend-error
+     - status: 200
+       -  // TODO: finish this document

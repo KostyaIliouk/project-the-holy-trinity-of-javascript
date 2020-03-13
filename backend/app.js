@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const newsapihandler = require('./newsapihandler/routing');
+const routing = require('./routing/routing');
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(function(req, res, next){
 });
 
 // paths
-app.use('/newsapi', newsapihandler);
+app.use('/', routing);
 
 // setup http connection
 // TODO: switch to https once hosting figured out

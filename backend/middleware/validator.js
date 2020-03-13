@@ -5,15 +5,15 @@ const check = require('express-validator');
 const file = require('../utilities/file');
 
 // suported countries list
-let newsapiSupportDict = '2';
-file.readFile("./middleware/files/newsapi-support-files.json")
+let newsapiSupportDict;
+file.readFile("./newsapihandler/files/newsapi-support-files.json")
     .then((value) => {
         newsapiSupportDict = JSON.parse(value);
     }, (err) => {
         console.error("There is an issue with the newsAPI supporting countries file.\n File was not able to be read");
         console.error(err);
+        newsapiSupportDict = [];
 });
-exports.newsapiSupportDict = newsapiSupportDict;
 
 // validation function
 function checkValidationResult(req, res, next) {
@@ -27,12 +27,16 @@ function checkValidationResult(req, res, next) {
 }
 
 exports.newsapiGetHeadlines = [
-    // check that code is alpha-2
+    // check that code is a country name
     check.query("country").exists().withMessage("must have country query param"),
-    check.query("country").isAlpha().withMessage("country query value must be alpha"),
-    check.query("country").isLength({min:2, max:2}).withMessage("country query value must follow alpha-2 standard"),
+    check.query("country").custom((country) =>{
+        const pat = /^([A-Z' ]+)$/i;
+        return pat.test(country);
+    }).withMessage("country query value must be alpha with spaces and/or apstrophes"),
     // check that code is of the supported countries
-    check.query('country').isIn(Object.keys(newsapiSupportDict)).withMessage("country query value is either not valid or not yet supported"),
+    check.query("country").custom((country) =>{
+        return (country in newsapiSupportDict);
+    }).withMessage("country query value is either not valid or not yet supported"),
     checkValidationResult
 ];
 
