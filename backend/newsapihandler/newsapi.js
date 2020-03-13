@@ -15,6 +15,7 @@ file.readFile('./newsapihandler/secret/api.key')
         console.error(err);
 });
 
+// get supported countries object
 file.readFile(`./newsapihandler/files/newsapi-support-files.json`)
     .then(function(value){
         newsapi.support = JSON.parse(value);

@@ -13,7 +13,7 @@ app.use(function(req, res, next){
     next();
 });
 
-// paths
+// paths sorted over here to keep things clean
 app.use('/', routing);
 
 // setup http connection

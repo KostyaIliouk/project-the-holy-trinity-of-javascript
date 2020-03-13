@@ -4,7 +4,7 @@
 const check = require('express-validator');
 const file = require('../utilities/file');
 
-// suported countries list
+// suported countries list for newsapi
 let newsapiSupportDict;
 file.readFile("./newsapihandler/files/newsapi-support-files.json")
     .then((value) => {
@@ -26,17 +26,18 @@ function checkValidationResult(req, res, next) {
     }
 }
 
+// validate /newsapi/getHeadlines GET call
 exports.newsapiGetHeadlines = [
     // check that code is a country name
     check.query("country").exists().withMessage("must have country query param"),
     check.query("country").custom((country) =>{
         const pat = /^([A-Z' ]+)$/i;
         return pat.test(country);
-    }).withMessage("country query value must be alpha with spaces and/or apstrophes"),
+    }).withMessage("country query value must be alpha with spaces and/or apostrophes"),
     // check that code is of the supported countries
     check.query("country").custom((country) =>{
         return (country in newsapiSupportDict);
-    }).withMessage("country query value is either not valid or not yet supported"),
+    }).withMessage("country query value is either not a country or not yet supported"),
     checkValidationResult
 ];
 
