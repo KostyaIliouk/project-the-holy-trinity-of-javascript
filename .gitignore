@@ -6,3 +6,7 @@ Thumbs.db
 node_modules
 *-lock.json
 
+# secret
+/secret
+/
+
