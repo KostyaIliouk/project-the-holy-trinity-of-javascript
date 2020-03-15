@@ -3,9 +3,21 @@ import News from './News.js'
 
 
 const NewsList = props => {
-  const newsList = props.data.map(arg => <News title={arg.title} />);
+  var newsList = (
+    <div className="News-empty"/>
+  );
+  if (props.data.length != 0) {
+    newsList = props.data.map(arg =>
+      <News title={arg.title}
+        url={arg.url}
+        source={arg.source}
+        description={arg.description}
+        urlToImage={arg.urlToImage}
+        publishedAt={arg.publishedAt}/>
+    );
+  }
   return (
-    <div>
+    <div className="News-list">
       {newsList}
     </div>
   );

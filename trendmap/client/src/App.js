@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react'
+import logo from './logo.svg'
 import WorldMap from './Map'
-import './App.css';
+import './App.css'
+import './Map.css'
+import './News.css'
+import './Reddit.css'
 
 class App extends Component {
   render() {
