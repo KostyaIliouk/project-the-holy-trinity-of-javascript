@@ -30,10 +30,8 @@ function checkValidationResult(req, res, next) {
 exports.newsapiGetHeadlines = [
     // check that code is a country name
     check.query("country").exists().withMessage("must have country query param"),
-    check.query("country").custom((country) =>{
-        const pat = /^([A-Z' ]+)$/i;
-        return pat.test(country);
-    }).withMessage("country query value must be alpha with spaces and/or apostrophes"),
+    check.query("country").isAlpha().withMessage("country query value must be alpha"),
+    check.query("country").isLength({min:2, max:2}).withMessage("country query value must be of length 2"),
     // check that code is of the supported countries
     check.query("country").custom((country) =>{
         return (newsapiSupportDict.alpha2.includes(country));
