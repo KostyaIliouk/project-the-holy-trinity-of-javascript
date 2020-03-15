@@ -16,7 +16,7 @@ file.readFile('./newsapihandler/secret/api.key')
 });
 
 // get supported countries object
-file.readFile(`./newsapihandler/files/newsapi-support-files.json`)
+file.readFile(`./newsapihandler/files/newsapi-support-list.json`)
     .then(function(value){
         newsapi.support = JSON.parse(value);
     }, function(err){
@@ -28,7 +28,7 @@ file.readFile(`./newsapihandler/files/newsapi-support-files.json`)
 exports.getHeadlines = function(req, res, next){
     // query api to return top stories of a given country
     newsapi.api.v2.topHeadlines({
-        country: newsapi.support[req.query.country]
+        country: req.query.country
     }).then(function(result){
         res.locals.newsapiresult = result;
         next();

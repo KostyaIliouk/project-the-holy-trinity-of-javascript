@@ -2,7 +2,7 @@
 
 ## GET
 
-- GET /newsapi/topHeadlines
+- GET /newsapi/getHeadlines
   - request
     - query string:
       - country: country_name
