@@ -2,11 +2,7 @@
 
 ## GET
 
-<<<<<<< HEAD
-- GET /newsapi/topHeadlines
-=======
 - GET /newsapi/getHeadlines
->>>>>>> a3178e71f393b141a6ccdf7bc0dffe98b388130c
   - request
     - query string:
       - country: country_name
