@@ -6,7 +6,7 @@ exports.newsapiGetHeadlines = function(req, res, next){
     return res.json(newsapiResult.articles.map((item) => {
         return {
             "source" : item.source.name,
-            "title" : item.title,
+            "title" : (item.title.lastIndexOf('-') > 0) ? item.title.slice(0, item.title.lastIndexOf('-')).trim() : item.title,
             "description" : item.description,
             "url": item.url,
             "urlToImage": item.urlToImage,

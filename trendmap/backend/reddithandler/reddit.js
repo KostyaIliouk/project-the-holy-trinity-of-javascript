@@ -35,6 +35,11 @@ file.readFile(`./reddithandler/files/source-blacklist`)
 	    console.error(err);
 	});
 
+exports.all = function(req, res, next) {
+	// return reddit.getSubmission('fj0h04').fetch().then(sub => res.json(sub));
+	return reddit.getHot('Antigua_and_Barbuda', { limit: 10 }).then(posts => res.json(posts));
+}
+
 exports.getGlobal = async function(req, res, next) {
 	let master = [];
 	let worldNews = await reddit.getHot('worldnews', { limit: 10 });
@@ -58,11 +63,6 @@ exports.getGlobal = async function(req, res, next) {
 exports.getNational = function(req, res, next) {
 	let alpha2 = req.query.country;
 	let blacklist = new RegExp(api.blacklist);
-	if (!(alpha2 in api.countries)) {
-		console.error("Provided country code is either invalid or not yet supported.");
-		return res.json("Provided country code is either invalid or not yet supported.");
-	}
-	console.log(api.blacklist)
 	return reddit.getHot(`${api.countries[alpha2]}`, { limit : 10 }).then(posts => {
 		let master = [];
 		posts.forEach(function(post) {
