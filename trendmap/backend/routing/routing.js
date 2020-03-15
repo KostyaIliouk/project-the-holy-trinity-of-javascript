@@ -3,7 +3,7 @@
 
 const router = require("express").Router();
 const newsapirouting = require("../newsapihandler/routing");
-const redditrouting = require("../redditapi/routing");
+const redditrouting = require("../reddithandler/routing");
 
 // split the routing between different api sections
 
