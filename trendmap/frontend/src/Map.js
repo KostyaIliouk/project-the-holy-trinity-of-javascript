@@ -1,5 +1,5 @@
 import React, { createRef, Component } from 'react'
-import { Map, Popup, TileLayer, GeoJSON } from 'react-leaflet'
+import { Map, TileLayer, GeoJSON } from 'react-leaflet'
 import NewsList from './NewsList.js'
 import RedditList from './RedditList.js'
 
@@ -23,6 +23,20 @@ export default class WorldMap extends Component {
     this.geoRef = createRef();
   }
 
+  componentDidMount() {
+    fetch(`/reddit/global`)
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          return [];
+        }
+      })
+      .then(response => {
+          this.setState({reddit: response});
+      });
+  }
+
   highlightFeature(e) {
     const layer = e.target;
 
@@ -42,10 +56,9 @@ export default class WorldMap extends Component {
   clickFeature(e, countryCode) {
     const map = this.mapRef.current.leafletElement;
     map.fitBounds(e.target.getBounds());
-    console.log(countryCode);
-    fetch(`/newsapi/getHeadlines/?country=${countryCode}`)
+    fetch(`/newsapi/getHeadlines/?country=${countryCode.toLowerCase()}`)
       .then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           return res.json();
         } else {
           return [];
@@ -54,9 +67,9 @@ export default class WorldMap extends Component {
       .then(response => {
           this.setState({news: response});
       });
-    fetch(`/newsapi/getHeadlines/?country=${countryCode}`)
+    fetch(`/reddit/national/?country=${countryCode.toLowerCase()}`)
       .then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           return res.json();
         } else {
           return [];
@@ -71,7 +84,7 @@ export default class WorldMap extends Component {
     layer.on({
         mouseover: this.highlightFeature,
         mouseout: this.resetHighlight,
-        click: (e) => this.clickFeature(e, feature.properties.name)
+        click: (e) => this.clickFeature(e, feature.properties.iso_a2)
     });
   }
 

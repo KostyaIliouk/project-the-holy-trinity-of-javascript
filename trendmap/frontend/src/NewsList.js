@@ -6,9 +6,10 @@ const NewsList = props => {
   var newsList = (
     <div className="News-empty"/>
   );
-  if (props.data.length != 0) {
-    newsList = props.data.map(arg =>
+  if (props.data.length !== 0) {
+    newsList = props.data.map((arg, index) =>
       <News title={arg.title}
+        key={index}
         url={arg.url}
         source={arg.source}
         description={arg.description}

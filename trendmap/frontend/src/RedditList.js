@@ -6,15 +6,16 @@ const RedditList = props => {
   var redditList = (
     <div className="Reddit-empty"/>
   );
-  if (props.data.length != 0) {
-    redditList = props.data.map(arg =>
+  if (props.data.length !== 0) {
+    redditList = props.data.map((arg, index) =>
       <Reddit title={arg.title}
+        key={index}
         url={arg.url}
         subreddit={arg.subreddit}
         description={arg.description}
         urlToImage={arg.urlToImage}
         publishedAt={arg.publishedAt}
-        upvote={arg.upvote}/>
+        upvotes={arg.upvotes}/>
     );
   }
   return (
