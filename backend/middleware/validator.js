@@ -6,7 +6,7 @@ const file = require('../utilities/file');
 
 // suported countries list for newsapi
 let newsapiSupportDict;
-file.readFile("./newsapihandler/files/newsapi-support-files.json")
+file.readFile("./newsapihandler/files/newsapi-support-list.json")
     .then((value) => {
         newsapiSupportDict = JSON.parse(value);
     }, (err) => {
@@ -36,7 +36,7 @@ exports.newsapiGetHeadlines = [
     }).withMessage("country query value must be alpha with spaces and/or apostrophes"),
     // check that code is of the supported countries
     check.query("country").custom((country) =>{
-        return (country in newsapiSupportDict);
+        return (newsapiSupportDict.alpha2.includes(country));
     }).withMessage("country query value is either not a country or not yet supported"),
     checkValidationResult
 ];
