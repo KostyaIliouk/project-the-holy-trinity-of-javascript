@@ -55,7 +55,7 @@ exports.validateCountry = [// check that code is a country name
     check.query("country").isLength({min:2, max:2}).withMessage("country query value must be of length 2"),
     // check that code is of the supported countries
     check.query("country").custom((country) =>{
-        return (subredditSupport.alpha2.includes(country));
+        return (subredditSupport.alpha2.includes(country.toUpperCase()));
     }).withMessage("country query value is either not a country or not yet supported."),
     checkValidationResult
 ];

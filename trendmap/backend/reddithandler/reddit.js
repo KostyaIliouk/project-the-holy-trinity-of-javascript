@@ -61,7 +61,7 @@ exports.getGlobal = async function(req, res, next) {
 }
 
 exports.getNational = function(req, res, next) {
-	let alpha2 = req.query.country;
+	let alpha2 = req.query.country.toUpperCase();
 	let blacklist = new RegExp(api.blacklist);
 	return reddit.getHot(`${api.countries[alpha2]}`, { limit : 10 }).then(posts => {
 		let master = [];
@@ -80,5 +80,7 @@ exports.getNational = function(req, res, next) {
 			});
 		});
 		return res.json(master.sort(compare));
+	}).catch(function(error) {
+		res.status(500).end(error);
 	});
 }
