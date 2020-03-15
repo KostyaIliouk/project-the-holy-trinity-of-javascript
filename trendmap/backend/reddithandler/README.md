@@ -34,7 +34,7 @@
   	- query string:
       - country: ISO alpha-2 country code
         - Not all countries are supported.
-          Please view `./files/subreddit-support-dict.json` to view supported country codes.
+          Please view [this file](files/subreddit-support-dict.json) to view supported country codes.
   - response:
     - status: 500
       - backend-error - err message will be shown showing explanation of crash
