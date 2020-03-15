@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import Map from './Map'
+import WorldMap from './Map'
 import './App.css';
 
 class App extends Component {

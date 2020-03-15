@@ -1,5 +1,6 @@
 import React, { createRef, Component } from 'react'
 import { Map, Popup, TileLayer, GeoJSON } from 'react-leaflet'
+import NewsList from './NewsList.js'
 import './Map.css'
 
 import countryData from './countryData.json'
@@ -13,11 +14,15 @@ export default class WorldMap extends Component {
       lng: -0.09,
       zoom: 3,
       minZoom: 2,
+      news: []
     };
     this.resetHighlight = this.resetHighlight.bind(this);
     this.clickFeature = this.clickFeature.bind(this);
     this.mapRef = createRef();
     this.geoRef = createRef();
+  }
+
+  componentDidMount() {
   }
 
   highlightFeature(e) {
@@ -40,6 +45,13 @@ export default class WorldMap extends Component {
     const map = this.mapRef.current.leafletElement;
     map.fitBounds(e.target.getBounds());
     console.log(countryCode);
+    fetch(`/newsapi/getHeadlines/?country=${countryCode}`)
+      .then(res => res.json())
+      .then(response => {
+          console.log(response);
+          this.setState({news: response});
+          console.log(this.state.news);
+      });
   }
 
   onEachFeature(feature, layer) {
@@ -61,26 +73,29 @@ export default class WorldMap extends Component {
   render() {
     const position = [this.state.lat, this.state.lng];
     return (
-      <Map
-        center={position}
-        zoom={this.state.zoom}
-        ref={this.mapRef}
-        minZoom={this.minZoom}
-        >
-        <TileLayer
-          url='https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVzc2Ftc2hhciIsImEiOiJjazdpb3B5ZTEwY2x2M2dtcXBpdXZicjB0In0.6YoLm3G3QZdXGLLj0So4SA'
-          id='mapbox/light-v9'
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          tileSize={512}
-          zoomOffset={-1}
-        />
-        <GeoJSON
-          ref={this.geoRef}
-          data={countryData}
-          style={this.style}
-          onEachFeature={(feature, layer) => this.onEachFeature(feature, layer)}
-        />
-      </Map>
+      <>
+        <Map
+          center={position}
+          zoom={this.state.zoom}
+          ref={this.mapRef}
+          minZoom={this.minZoom}
+          >
+          <TileLayer
+            url='https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVzc2Ftc2hhciIsImEiOiJjazdpb3B5ZTEwY2x2M2dtcXBpdXZicjB0In0.6YoLm3G3QZdXGLLj0So4SA'
+            id='mapbox/light-v9'
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            tileSize={512}
+            zoomOffset={-1}
+          />
+          <GeoJSON
+            ref={this.geoRef}
+            data={countryData}
+            style={this.style}
+            onEachFeature={(feature, layer) => this.onEachFeature(feature, layer)}
+          />
+        </Map>
+        <NewsList data={this.state.news}/>
+      </>
     );
   }
 }
