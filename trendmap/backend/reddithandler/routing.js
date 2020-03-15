@@ -2,9 +2,10 @@
 "use strict";
 
 const router = require("express").Router();
-const snoowrapapi = require("./reddit");
+const reddit = require("./reddit");
 
 // get headlines of given country
-router.get('/hot', snoowrapapi.hot);
+router.get('/global', reddit.getGlobal);
+router.get('/national', reddit.getNational);
 
 module.exports = router;
