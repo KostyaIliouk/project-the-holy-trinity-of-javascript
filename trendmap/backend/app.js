@@ -14,7 +14,9 @@ app.use(function(req, res, next){
     next();
 });
 
-// paths sorted over here to keep things clean
+// TODO:launch connection & populate with reddis
+
+// handle all possible routing
 app.use('/', routing);
 
 // setup http connection

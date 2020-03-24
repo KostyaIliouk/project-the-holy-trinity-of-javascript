@@ -30,7 +30,8 @@
     "express": "^4.17.1",
     "express-validator": "^6.4.0",
     "newsapi": "^2.4.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "snoowrap": "^1.21.0"

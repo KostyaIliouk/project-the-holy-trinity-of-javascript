@@ -2,13 +2,9 @@
 "use strict";
 
 const router = require("express").Router();
-const newsapirouting = require("../newsapihandler/routing");
-const redditrouting = require("../reddithandler/routing");
+const redisrouting = require("../redishandler/routing");
 
-// split the routing between different api sections
-
-// newsapi routing
-router.use('/newsapi', newsapirouting);
-router.use('/reddit', redditrouting);
+// all incoming calls go through redis
+router.use('/api', redisrouting)
 
 module.exports = router;
