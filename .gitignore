@@ -5,6 +5,7 @@ Thumbs.db
 # node.js
 node_modules
 *-lock.json
+npm-debug.log
 
 # secret
 
