@@ -1,0 +1,15 @@
+.content-bg {
+	width: 100%;
+}
+
+.tab {
+	min-width: "72px";
+  	background-color: "green";
+  	flex: 1;
+}
+
+.tabs {
+	background-color: "red" !important;
+	display: "flex";
+	flex-direction: "column";
+}

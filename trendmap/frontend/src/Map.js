@@ -97,24 +97,23 @@ export default class WorldMap extends Component {
   }
 
   render() {
+    // <NewsList data={this.state.news}/>
+    // <RedditList data={this.state.reddit}/>
     const position = [this.state.lat, this.state.lng];
     const mapStyle = "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token="
-    const accessToken = "pk.eyJ1IjoiaGVzc2Ftc2hhciIsImEiOiJjazdpb3B5ZTEwY2x2M2dtcXBpdXZicjB0In0.6YoLm3G3QZdXGLLj0So4SA"
-    const mapUrl = mapStyle + accessToken
+    const mapUrl = mapStyle + process.env.REACT_APP_LEAFLET_ACCESS_TOKEN;
     return (
-      <>
-        <NewsList data={this.state.news}/>
-        <RedditList data={this.state.reddit}/>
-        <div className="Map">
+        <>
           <Map
             center={position}
             zoom={this.state.zoom}
             ref={this.mapRef}
             minZoom={this.minZoom}
+            className="Map"
             >
             <TileLayer
               url={mapUrl}
-              id='mapbox/light-v9'
+              id='mapbox/outdoors-v11'
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               tileSize={512}
               zoomOffset={-1}
@@ -126,7 +125,6 @@ export default class WorldMap extends Component {
               onEachFeature={(feature, layer) => this.onEachFeature(feature, layer)}
             />
           </Map>
-        </div>
       </>
     );
   }
