@@ -48,37 +48,57 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles({
-  tab: {
-  	minWidth: "72px",
-  	flexGrow: 1,
-  	borderBottom: "1px solid red",
-  	borderLeft: "1px solid red",
-  },
+const useStyles = makeStyles(theme => ({
   inner: {
   	flexGrow: 1,
   	minHeight: "100%",
   	maxHeight: "100%",
-  	overflowY: "scroll",
   	height: "100px",
-  	borderLeft: "1px solid red",
   },
   panel: {
   	overflowY: "scroll",
-  	height: "100%"
+  	height: "100%",
+	backgroundColor: "rgb(70, 70, 70)",
+	'& ::-webkit-scrollbar': {
+		display: "none"
+	}	
   }
-});
+}));
 
 const StyledTabs = withStyles({
 	root: {
 		display: "flex",
 		flex: 1,
 		height: "100%",
+		backgroundColor: "#323234",
 	},
 	scroller: {
 		display: "flex",
-	}
+	},
+	flexContainerVertical: {
+		width: "100%",
+	},
+	indicator: {
+    	display: "none"
+  	},
 })(Tabs);
+
+const StyledTab = withStyles(theme => ({
+	root: {
+		minWidth: "72px",
+	  	width: "100%",
+	  	flexGrow: 1,
+	  	backgroundColor: "#323234"
+	},
+	wrapper: {
+		color: "rgb(120, 120, 120)"
+	},
+	selected: {
+		'& > .MuiTab-wrapper': {
+			color: "white",
+		}
+	}
+}))(Tab);
 
 export default function Content() {
 
@@ -100,13 +120,13 @@ export default function Content() {
 				 		<Paper square elevation={2} className={classes.inner}>
 					      <TabPanel height={100} value={value} index={0} className={classes.panel}>
 					        
-					        <MediaCard />
-					        <MediaCard />
+					        <MediaCard title="Title" desc="desc" url="#" img="https://via.placeholder.it/150" />
+					        <MediaCard title="Title" desc="desc" url="#" img="https://via.placeholder.it/150" />
 
 					      </TabPanel>
 					      <TabPanel value={value} index={1} className={classes.panel}>
 					        
-					        <MediaCard />
+					        <MediaCard title="Title" desc="desc" url="#" img="https://via.placeholder.it/150" />
 				      	</TabPanel>
 				      </Paper>
 				 	</Grid>
@@ -120,8 +140,8 @@ export default function Content() {
 					        orientation="vertical"
 					        variant="standard"
 					      >
-				      		<Tab icon={<FontAwesomeIcon icon={faNewspaper} />} className={classes.tab} {...a11yProps(0)} aria-label="reddit" />
-					      	<Tab icon={<FontAwesomeIcon icon={faRedditAlien} />} className={classes.tab} {...a11yProps(1)} aria-label="news" />
+				      		<StyledTab icon={<FontAwesomeIcon icon={faNewspaper} size="2x" />}  {...a11yProps(0)} aria-label="reddit" />
+					      	<StyledTab icon={<FontAwesomeIcon icon={faRedditAlien} size="2x" />} {...a11yProps(1)} aria-label="news" />
 					      	
 				      	</StyledTabs>
 				 	</Grid>

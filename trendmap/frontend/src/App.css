@@ -1,7 +1,6 @@
 .nav {
 	display: flex;
 	flex-flow: 'row';
-	border-top: 1px solid red;
 }
 
 .nav-item {
@@ -12,7 +11,7 @@
 
 .nav-item:focus,
 .nav-item:hover {
-    text-shadow: 2px 2px 2px lightgrey;
+    
 }
 
 .map {
@@ -23,5 +22,9 @@
 	font-size: calc(14px + (36 - 14) * ((100vw - 300px) / (1600 - 300))) !important;
 	line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300))) !important;
 	padding: 0.5%;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 

@@ -50,7 +50,7 @@ class App extends Component {
 				        </Grid>
 			        </Grid>
 		        </Box>
-		        <Paper square className="nav" elevation={4}>
+		        <Paper square className="nav" style={{ backgroundColor: "#323234", color: "white" }} elevation={4}>
 		        	<Typography variant="h1" className="app-title">TrendMap</Typography>
 		        	<Box className="filler" flexGrow={2}/>
 	        		<Typography variant="h1" className="nav-item">Credits</Typography>
