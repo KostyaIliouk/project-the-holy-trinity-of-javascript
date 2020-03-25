@@ -47,4 +47,4 @@ exports.validateFetch = [
             newsapiSupportDict.alpha2.includes(country.toLowerCase()));
     }).withMessage("country query value is either not a country or not yet supported.\n Please try again"),
     checkValidationResult
-]
+];

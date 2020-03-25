@@ -83,8 +83,9 @@ let consumers = (redditQueue, newsapiQueue) => {
     // define a reddit consumer/worker  
     redditQueue.process((job, done) => {
         // get data & figure out key
-        let data = (job.data.country)? reddit.getNational(job.data.country.toUpperCase()) : reddit.getGlobal(); 
+        // let data = (job.data.country)? reddit.getNational(job.data.country.toUpperCase()) : reddit.getGlobal(); 
         let key = (job.data.country)? job.data.country.toUpperCase() : 'GLOBAL';
+        let data = Promise.resolve(`fake data for now, for ${key}`);
         data
          .then(value =>{
             let client = redis.createClient();
@@ -93,19 +94,20 @@ let consumers = (redditQueue, newsapiQueue) => {
                     if(err) console.error(`r~ hmset error:\n${err}`);
                 });
                 client.quit();
+                done(null, {res:`reddit~ ${job.data.country} done`});
             });
             client.on('error', err=>console.error(`r~ random error: ${err}`));
-            done(`reddit~ ${job.data.country} done`);
          })
          .catch(err => {
             console.error(`r~ data is not availble: ${err}`);
-            done();
+            done('data received for reddit was not adequate');
          });
     });
 
     // define a newsapi consumer/worker
     newsapiQueue.process((job, done) =>{
-        let data = newsapi.getHeadlines(job.data.country);
+        // let data = newsapi.getHeadlines(job.data.country);
+        let data = Promise.resolve(`fake data for now, for ${job.data.country}`);
         let key = job.data.country;
         data
          .then(value => {
@@ -115,54 +117,62 @@ let consumers = (redditQueue, newsapiQueue) => {
                     if(err) console.error(`r~ hmset error:\n${err}`);
                 });
                 client.quit();
+                done(null, {res:`newsapi~ ${job.data.country} done`});
             });
             client.on('error', err=>console.error(`n~ random error: ${err}`));
-            done(`newsapi~ ${job.data.country} done`);
          })
          .catch(err => {
             console.error(`n~ data is not availble: ${err}`);
-            done();
+            done('data received for newsapi was not adequate');
          });
     });
 };
 
 let listeners = (redditQueue, newsapiQueue) =>{
 
-    redditQueue.on('global:completed', jobId => {
-        console.log(`${jobId} completed`);
+    redditQueue.on('completed', (job, result) => {
+        console.log(`${job.id} completed w/ result: ${result.res}`);
     });
 
-    newsapiQueue.on('global:completed', jobId => {
-        console.log(`${jobId} completed`);
+    redditQueue.on('failed', (job, result) => {
+        console.log(`${job.id} failed w/ result ${result}`);
+    });
+
+    newsapiQueue.on('completed', (job, result) => {
+        console.log(`${job.id} completed w/ result: ${result.res}`);
+    });
+
+    newsapiQueue.on('failed', (job, result) => {
+        console.log(`${job.id} failed w/ result ${result}`);
     });
 
     return;
 };
 
-let producers = async (redditQueue, newsapiQueue) => {
+let producers = (redditQueue, newsapiQueue) => {
     // promises to read all these files
     let filePromises = [
         file.readFile(`./apihandler/newsapihandler/files/newsapi-support-list.json`),
         file.readFile(`./apihandler/reddithandler/files/subreddit-support-list.json`)
     ];
 
-    await Promise.all(filePromises).then( async values => {
+    Promise.all(filePromises).then( async values => {
         let api = {};
         api.newsapi = JSON.parse(values[0]);
         api.reddit = JSON.parse(values[1]);
 
         // add all jobs for newsapi
-        let repeat = {repeat:{cron: '*/1 * * * *'}};      // repeat every 1 minutes
-        api.newsapi.alpha2.forEach(async code => {
-            await newsapiQueue.add({country: code});    // recommended to use this await1
+        let repeatValue = {cron: '*/1 * * * *'};      // repeat every 1 minutes
+        api.newsapi.alpha2.forEach(code => {
+            newsapiQueue.add({country: code}, {repeat: repeatValue, jobId: code});    // recommended to use this await
         });
         
         // add all the jobs for reddit
-        api.reddit.alpha2.forEach(async code => {
-            await redditQueue.add({country: code});     // recomment to user await here
+        api.reddit.alpha2.forEach(code => {
+            redditQueue.add({country: code}, {repeat: repeatValue, jobId: code});     // recomment to user await here
         });
         // dont forget about global
-        await redditQueue.add({}, repeat);
+        await redditQueue.add({}, {repeat: repeatValue, jobId: 'GLOBAL'});
         
         return;
     }).catch(error => {
