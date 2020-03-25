@@ -2,12 +2,12 @@
 "use strict";
 
 const NEWSAPI = require('newsapi');
-const file = require('../utilities/file');
+const file = require('../../utilities/file');
 
 // get saved api key
 // create api connection
 let newsapi = {};
-file.readFile('./newsapihandler/secret/api.key')
+file.readFile('./apihandler/newsapihandler/secret/api.key')
     .then(function(value){
         newsapi.api = new NEWSAPI(value);
     }, function(err){
@@ -16,7 +16,7 @@ file.readFile('./newsapihandler/secret/api.key')
 });
 
 // get supported countries object
-file.readFile(`./newsapihandler/files/newsapi-support-list.json`)
+file.readFile(`./apihandler/newsapihandler/files/newsapi-support-list.json`)
     .then(function(value){
         newsapi.support = JSON.parse(value);
     }, function(err){
@@ -25,15 +25,23 @@ file.readFile(`./newsapihandler/files/newsapi-support-list.json`)
 });
 
 // getHeadlines first endpoint
-exports.getHeadlines = function(req, res, next){
+exports.getHeadlines = function(alpha2){
     // query api to return top stories of a given country
-    newsapi.api.v2.topHeadlines({
-        country: req.query.country
+    return newsapi.api.v2.topHeadlines({
+        country: alpha2
     }).then(function(result){
-        res.locals.newsapiresult = result;
-        next();
+        return JSON.stringify(result.articles.map((item) => {
+            return {
+                "source" : item.source.name,
+                "title" : (item.title.lastIndexOf('-') > 0) ? item.title.slice(0, item.title.lastIndexOf('-')).trim() : item.title,
+                "description" : item.description,
+                "url": item.url,
+                "urlToImage": item.urlToImage,
+                "publishedAt": item.publishedAt
+            };
+        }));
     }, function(err){
         console.error(err);
-        return res.status(500).end("internal server error");
+        return null;
     });
 };

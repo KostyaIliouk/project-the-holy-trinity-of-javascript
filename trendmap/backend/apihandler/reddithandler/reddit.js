@@ -1,6 +1,8 @@
+/* jshint node: true */
 'use strict';
+
 var snoowrap = require('snoowrap');
-const file = require('../utilities/file');
+const file = require('../../utilities/file');
 
 var reddit;
 snoowrap.fromApplicationOnlyAuth({
@@ -19,7 +21,7 @@ function compare(a, b) {
 }
 
 var api = {};
-file.readFile(`./reddithandler/files/subreddit-support-dict.json`)
+file.readFile(`./apihandler/reddithandler/files/subreddit-support-dict.json`)
     .then(function(value){
         api.countries = JSON.parse(value);
     }, function(err){
@@ -27,7 +29,7 @@ file.readFile(`./reddithandler/files/subreddit-support-dict.json`)
         console.error(err);
 });
 
-file.readFile(`./reddithandler/files/source-blacklist`)
+file.readFile(`./apihandler/reddithandler/files/source-blacklist`)
 	.then(function(value) {
 		api.blacklist = value;
 	}, function(err) {
@@ -35,12 +37,7 @@ file.readFile(`./reddithandler/files/source-blacklist`)
 	    console.error(err);
 	});
 
-exports.all = function(req, res, next) {
-	// return reddit.getSubmission('fj0h04').fetch().then(sub => res.json(sub));
-	return reddit.getHot('Antigua_and_Barbuda', { limit: 10 }).then(posts => res.json(posts));
-}
-
-exports.getGlobal = async function(req, res, next) {
+exports.getGlobal = async function() {
 	let master = [];
 	let worldNews = await reddit.getHot('worldnews', { limit: 10 });
 	let news = await reddit.getHot('news', { limit: 10 });
@@ -57,11 +54,10 @@ exports.getGlobal = async function(req, res, next) {
 			"downvotes": post.downs,
 		});
 	});
-	return res.json(master.sort(compare).slice(0, 10));
-}
+	return JSON.stringify(master.sort(compare).slice(0, 10));
+};
 
-exports.getNational = function(req, res, next) {
-	let alpha2 = req.query.country.toUpperCase();
+exports.getNational = function(alpha2) {
 	let blacklist = new RegExp(api.blacklist);
 	return reddit.getHot(`${api.countries[alpha2]}`, { limit : 10 }).then(posts => {
 		let master = [];
@@ -79,8 +75,9 @@ exports.getNational = function(req, res, next) {
 				"downvotes": post.downs,
 			});
 		});
-		return res.json(master.sort(compare));
+		return JSON.stringify(master.sort(compare));
 	}).catch(function(error) {
-		res.status(500).end(error);
+		console.error(error);
+		return null;
 	});
-}
+};
