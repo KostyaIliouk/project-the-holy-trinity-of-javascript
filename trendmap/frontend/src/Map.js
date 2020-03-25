@@ -1,5 +1,5 @@
 import React, { createRef, Component } from 'react'
-import { Map, TileLayer, GeoJSON } from 'react-leaflet'
+import { Map, TileLayer, GeoJSON, LatLng } from 'react-leaflet'
 import NewsList from './NewsList.js'
 import RedditList from './RedditList.js'
 
@@ -115,14 +115,21 @@ export default class WorldMap extends Component {
     const position = [this.state.lat, this.state.lng];
     const mapStyle = "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token="
     const mapUrl = mapStyle + process.env.REACT_APP_LEAFLET_ACCESS_TOKEN;
+
     return (
         <>
           <Map
             center={position}
             zoom={this.state.zoom}
             ref={this.mapRef}
-            minZoom={this.minZoom}
+            zoomSnap={0.5}
+            zoomDelta={0.5}
+            maxBoundsViscosity={1.0}
             className="Map"
+            maxBounds={[
+                [-90, -180],
+                [90, 180]
+              ]}
             >
             <TileLayer
               url={mapUrl}
@@ -130,6 +137,8 @@ export default class WorldMap extends Component {
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               tileSize={512}
               zoomOffset={-1}
+              maxZoom={6}
+              minZoom={2.5}
             />
             <GeoJSON
               ref={this.geoRef}
