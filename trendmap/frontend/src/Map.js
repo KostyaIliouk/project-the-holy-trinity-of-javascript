@@ -5,6 +5,17 @@ import RedditList from './RedditList.js'
 
 import countryData from './countryData.json'
 
+function getColor(continent) {
+    return continent == "Africa" ? '#7fbc41' :
+           continent == "Europe" ? '#d73027' :
+           continent == "North America" ? '#fdae61' :
+           continent == "South America" ? '#f1b6da' :
+           continent == "Asia" ? '#fee090' :
+           continent == "Oceania" ? '#bf812d' :
+           continent == "Antarctica" ? '#fff' :
+                                         '#4575b4';
+}
+
 
 export default class WorldMap extends Component {
   constructor() {
@@ -42,7 +53,7 @@ export default class WorldMap extends Component {
 
     layer.setStyle({
         weight: 4,
-        color: '#3182bd',
+        color: '#666',
         dashArray: '',
         fillOpacity: 0.6
     });
@@ -90,9 +101,11 @@ export default class WorldMap extends Component {
 
   style(feature) {
     return {
+        fillColor: getColor(feature.properties.CONTINENT),
         weight: 0.1,
+        opacity: 1,
         color: 'white',
-        opacity: 1
+        fillOpacity: 0.6
     };
   }
 
