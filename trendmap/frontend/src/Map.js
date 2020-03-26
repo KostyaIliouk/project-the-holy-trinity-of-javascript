@@ -25,6 +25,7 @@ export default class WorldMap extends Component {
       lng: -0.09,
       zoom: 3,
       minZoom: 2,
+      maxZoom: 6,
       news: [],
       reddit: []
     };
@@ -124,6 +125,8 @@ export default class WorldMap extends Component {
             ref={this.mapRef}
             zoomSnap={0.5}
             zoomDelta={0.5}
+            minZoom={this.state.minZoom}
+            maxZoom={this.state.maxZoom}
             maxBoundsViscosity={1.0}
             className="Map"
             maxBounds={[
@@ -137,8 +140,6 @@ export default class WorldMap extends Component {
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               tileSize={512}
               zoomOffset={-1}
-              maxZoom={6}
-              minZoom={2.5}
             />
             <GeoJSON
               ref={this.geoRef}
