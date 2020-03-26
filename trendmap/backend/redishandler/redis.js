@@ -20,8 +20,6 @@ const newsapi = require('../apihandler/newsapihandler/newsapi');
  * Incoming calls should not be able to have write access to Redis - only read access.
  * 
  * // TODO: dont forget to add connection string when deploying
- * // TODO: setup retry connection to createClient()
- * // TODO: figure out global call
  ********************/
 exports.fetch = function(req, res, next){
     // create connection to redis
@@ -48,6 +46,32 @@ exports.fetch = function(req, res, next){
                     data: reply[1]}
                 ]);
             });
+    });
+    client.on('errer', (err) => {
+        console.error(`error with incoming call to redis:\n${err}`);
+        return res.status(500).end("redis error, please try again");
+    });
+};
+
+exports.global = function(req, res, next){
+    // create connection to redis
+    const client = redis.createClient(); 
+    client.on('connect', () =>{
+        // set up a multi command
+        client.hget('reddit', 'GLOBAL', (err, reply) =>{
+            // add exit client to exec queue
+            client.quit();
+            if(err) {
+                console.error(`error with incoming call to redis: ${err}`);
+                return res.status(500).end("redis error, please try again");
+            }
+            return res.json([
+                {source: 'reddit',
+                data: reply},
+                {source: 'newsapi',
+                data: null}
+            ]);
+        });
     });
     client.on('errer', (err) => {
         console.error(`error with incoming call to redis:\n${err}`);
@@ -83,9 +107,8 @@ let consumers = (redditQueue, newsapiQueue) => {
     // define a reddit consumer/worker  
     redditQueue.process((job, done) => {
         // get data & figure out key
-        // let data = (job.data.country)? reddit.getNational(job.data.country.toUpperCase()) : reddit.getGlobal(); 
+        let data = (job.data.country)? reddit.getNational(job.data.country.toUpperCase()) : reddit.getGlobal(); 
         let key = (job.data.country)? job.data.country.toUpperCase() : 'GLOBAL';
-        let data = Promise.resolve(`fake data for now, for ${key}`);
         data
          .then(value =>{
             let client = redis.createClient();
@@ -106,8 +129,8 @@ let consumers = (redditQueue, newsapiQueue) => {
 
     // define a newsapi consumer/worker
     newsapiQueue.process((job, done) =>{
-        // let data = newsapi.getHeadlines(job.data.country);
-        let data = Promise.resolve(`fake data for now, for ${job.data.country}`);
+        let data = newsapi.getHeadlines(job.data.country);
+        // let data = Promise.resolve(`fake data for now, for ${job.data.country}`);   // fake data
         let key = job.data.country;
         data
          .then(value => {
@@ -162,17 +185,18 @@ let producers = (redditQueue, newsapiQueue) => {
         api.reddit = JSON.parse(values[1]);
 
         // add all jobs for newsapi
-        let repeatValue = {cron: '*/1 * * * *'};      // repeat every 1 minutes
+        let repeatNewsapi = {cron: '1 */3 * * *'};      // repeat every 3 hours
         api.newsapi.alpha2.forEach(code => {
-            newsapiQueue.add({country: code}, {repeat: repeatValue, jobId: code});    // recommended to use this await
+            newsapiQueue.add({country: code}, {repeat: repeatNewsapi, jobId: code});    // recommended to use this await
         });
         
+        let repeatReddit = {cron: '1 */1 * * *'};       // repeat every hour
         // add all the jobs for reddit
         api.reddit.alpha2.forEach(code => {
-            redditQueue.add({country: code}, {repeat: repeatValue, jobId: code});     // recomment to user await here
+            redditQueue.add({country: code}, {repeat: repeatReddit, jobId: code});     // recomment to user await here
         });
         // dont forget about global
-        await redditQueue.add({}, {repeat: repeatValue, jobId: 'GLOBAL'});
+        await redditQueue.add({}, {repeat: repeatReddit, jobId: 'GLOBAL'});
         
         return;
     }).catch(error => {

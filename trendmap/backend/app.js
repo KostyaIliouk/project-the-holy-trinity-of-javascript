@@ -15,7 +15,6 @@ app.use(function(req, res, next){
     next();
 });
 
-// TODO:launch connection & populate reddis
 redis.setupWorkers();
 
 // handle all possible routing
