@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const routing = require('./routing/routing');
+const redis = require('./redishandler/redis');
 
 const app = express();
 
@@ -14,7 +15,9 @@ app.use(function(req, res, next){
     next();
 });
 
-// paths sorted over here to keep things clean
+redis.setupWorkers();
+
+// handle all possible routing
 app.use('/', routing);
 
 // setup http connection
