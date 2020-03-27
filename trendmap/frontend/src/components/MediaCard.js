@@ -25,26 +25,36 @@ const useStyles = makeStyles({
 export default function MediaCard(props) {
   const classes = useStyles();
 
+  const handleClick = () => {
+    window.open(`${props.url}`, "_blank");
+  }
+
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea onClick={handleClick}>
         <CardMedia
           className={classes.media}
-          image="{props.img}"
+          image={props.img}
           title=""
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {props.title}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography className={classes.pos} component={'div'} color="textSecondary">
+            {props.subtitle}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component={'div'}>
             {props.desc}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          <a href="{props.url}">Learn More <FontAwesomeIcon icon={faExternalLinkAlt} /></a>
+        <Typography variant="button" component={'div'} >
+          {props.date}
+        </Typography>
+        <Button size="medium" color="primary">
+          <a href={props.url} target="_blank" rel="noopener noreferrer" >Learn More <FontAwesomeIcon icon={faExternalLinkAlt} /></a>
         </Button>
       </CardActions>
     </Card>

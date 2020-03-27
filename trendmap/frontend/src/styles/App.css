@@ -9,6 +9,14 @@
 	padding: 1%;
 }
 
+.nav-link a{
+	color: white;
+}
+.nav-link:focus,
+.nav-link:hover {
+	
+}
+
 .nav-item:focus,
 .nav-item:hover {
     

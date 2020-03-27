@@ -186,11 +186,13 @@ let producers = (redditQueue, newsapiQueue) => {
 
         // add all jobs for newsapi
         let repeatNewsapi = {cron: '1 */3 * * *'};      // repeat every 3 hours
+        // let repeatNewsapi = {cron: '*/1 * * * *'};
         api.newsapi.alpha2.forEach(code => {
             newsapiQueue.add({country: code}, {repeat: repeatNewsapi, jobId: code});    // recommended to use this await
         });
         
         let repeatReddit = {cron: '1 */1 * * *'};       // repeat every hour
+        // let repeatReddit = {cron: '*/1 * * * *'};
         // add all the jobs for reddit
         api.reddit.alpha2.forEach(code => {
             redditQueue.add({country: code}, {repeat: repeatReddit, jobId: code});     // recomment to user await here

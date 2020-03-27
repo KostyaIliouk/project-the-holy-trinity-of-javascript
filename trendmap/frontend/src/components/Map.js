@@ -1,33 +1,31 @@
-import React, { createRef, Component } from 'react'
-import { Map, TileLayer, GeoJSON, LatLng } from 'react-leaflet'
-import NewsList from './NewsList.js'
-import RedditList from './RedditList.js'
+import React, { createRef, Component } from 'react';
+import { Map, TileLayer, GeoJSON } from 'react-leaflet';
 
-import countryData from './countryData.json'
+import countryData from '../countryData.json'
 
 function getColor(continent) {
-    return continent == "Africa" ? '#7fbc41' :
-           continent == "Europe" ? '#d73027' :
-           continent == "North America" ? '#fdae61' :
-           continent == "South America" ? '#f1b6da' :
-           continent == "Asia" ? '#fee090' :
-           continent == "Oceania" ? '#bf812d' :
-           continent == "Antarctica" ? '#fff' :
+    return continent === "Africa" ? '#7fbc41' :
+           continent === "Europe" ? '#d73027' :
+           continent === "North America" ? '#fdae61' :
+           continent === "South America" ? '#f1b6da' :
+           continent === "Asia" ? '#fee090' :
+           continent === "Oceania" ? '#bf812d' :
+           continent === "Antarctica" ? '#fff' :
                                          '#4575b4';
 }
 
 
 export default class WorldMap extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      lat: 51.505,
-      lng: -0.09,
-      zoom: 3,
+      lat: props.lat,
+      lng: props.lng,
+      zoom: 4,
       minZoom: 2,
       maxZoom: 6,
-      news: [],
-      reddit: []
+      onLoad: props.onLoad,
+      onClick: props.onClick,
     };
     this.resetHighlight = this.resetHighlight.bind(this);
     this.clickFeature = this.clickFeature.bind(this);
@@ -36,7 +34,7 @@ export default class WorldMap extends Component {
   }
 
   componentDidMount() {
-    fetch(`/reddit/global`)
+    fetch(`/api/global`)
       .then(res => {
         if (res.status === 200) {
           return res.json();
@@ -45,8 +43,9 @@ export default class WorldMap extends Component {
         }
       })
       .then(response => {
-          this.setState({reddit: response});
+          this.state.onLoad(response);
       });
+      
   }
 
   highlightFeature(e) {
@@ -68,7 +67,7 @@ export default class WorldMap extends Component {
   clickFeature(e, countryCode) {
     const map = this.mapRef.current.leafletElement;
     map.fitBounds(e.target.getBounds());
-    fetch(`/newsapi/getHeadlines/?country=${countryCode.toLowerCase()}`)
+    fetch(`/api/fetch?country=${countryCode.toLowerCase()}`)
       .then(res => {
         if (res.status === 200) {
           return res.json();
@@ -77,18 +76,7 @@ export default class WorldMap extends Component {
         }
       })
       .then(response => {
-          this.setState({news: response});
-      });
-    fetch(`/reddit/national/?country=${countryCode.toLowerCase()}`)
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          return [];
-        }
-      })
-      .then(response => {
-          this.setState({reddit: response});
+          this.state.onClick(response);
       });
   }
 
@@ -96,7 +84,7 @@ export default class WorldMap extends Component {
     layer.on({
         mouseover: this.highlightFeature,
         mouseout: this.resetHighlight,
-        click: (e) => this.clickFeature(e, feature.properties.iso_a2)
+        click: (e) => this.clickFeature(e, feature.properties.ISO_A2)
     });
   }
 
