@@ -1,0 +1,38 @@
+.nav {
+	display: flex;
+	flex-flow: 'row';
+}
+
+.nav-item {
+	font-size: calc(14px + (26 - 14) * ((100vw - 300px) / (1600 - 300))) !important;
+	line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300))) !important;
+	padding: 1%;
+}
+
+.nav-link a{
+	color: white;
+}
+.nav-link:focus,
+.nav-link:hover {
+	
+}
+
+.nav-item:focus,
+.nav-item:hover {
+    
+}
+
+.map {
+	min-height: 100%;
+}
+
+.app-title {
+	font-size: calc(14px + (36 - 14) * ((100vw - 300px) / (1600 - 300))) !important;
+	line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300))) !important;
+	padding: 0.5%;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+

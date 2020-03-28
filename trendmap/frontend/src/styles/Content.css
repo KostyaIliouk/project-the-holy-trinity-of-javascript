@@ -1,0 +1,25 @@
+.content-bg {
+	width: 100%;
+}
+
+.tab {
+	min-width: "72px";
+  	background-color: "green";
+  	flex: 1;
+}
+
+.tabs {
+	background-color: "red" !important;
+	display: "flex";
+	flex-direction: "column";
+}
+
+.scrollable-element {
+	scrollbar-color: red blue !important;
+}
+
+#Reddit-upvote {
+  height: 30px;
+  width: 30px;
+  opacity: 0.5;
+}
