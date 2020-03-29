@@ -1,7 +1,6 @@
 /* jshint node:true */
 "use strict";
 
-const check = require('express-validator');
 const file = require('../utilities/file');
 
 // suported countries list for newsapi
@@ -25,26 +24,25 @@ file.readFile("./apihandler/reddithandler/files/subreddit-support-list.json")
         subredditSupport = [];
 });
 
-// validation function
-function checkValidationResult(req, res, next) {
-    const errors = check.validationResult(req);
-    if(errors.isEmpty()){
-        return next();
+exports.validate = function(countryCode) {
+    var errors = [];
+    if (!countryCode) {
+        errors.push("country code is empty");
+    }
+    if (!(/^[a-zA-Z()]+$/.test(countryCode))) {
+        errors.push("country code value must be alpha");
+    }
+    if (countryCode.length !== 2) {
+        errors.push("country code value must be of length 2");
+    }
+    if (!subredditSupport.alpha2.includes(countryCode.toUpperCase()) && !newsapiSupportDict.alpha2.includes(countryCode.toLowerCase())) {
+        errors.push("country code value is either not a country or not yet supported.\n Please try again");
+    }
+    if (!errors.length) {
+        return [true, null, null];
     } else {
-        const errMsg = errors.array({onlyFirstError:true}).map((err)=>{return err.msg;}).join('; ');
-        return res.status(400).end(errMsg);
+        const errMsg = errors.map((err)=>{return err.msg;}).join('; ');
+        console.error(errMsg);
+        return [false, 400, errMsg];
     }
 }
-
-exports.validateFetch = [
-    // check that code is a country name
-    check.query("country").exists().withMessage("must have country query param"),
-    check.query("country").isAlpha().withMessage("country query value must be alpha"),
-    check.query("country").isLength({min:2, max:2}).withMessage("country query value must be of length 2"),
-    // check that the code is supported by at least one of our existing apis
-    check.query("country").custom((country) =>{
-        return (subredditSupport.alpha2.includes(country.toUpperCase()) ||
-            newsapiSupportDict.alpha2.includes(country.toLowerCase()));
-    }).withMessage("country query value is either not a country or not yet supported.\n Please try again"),
-    checkValidationResult
-];

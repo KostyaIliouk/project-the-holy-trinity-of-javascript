@@ -21,39 +21,39 @@ const newsapi = require('../apihandler/newsapihandler/newsapi');
  * 
  * // TODO: dont forget to add connection string when deploying
  ********************/
-exports.fetch = function(req, res, next){
+exports.fetch = function(req, socket){
     // create connection to redis
-    const client = redis.createClient(); 
-    client.on('connect', () =>{
+    const client = redis.createClient();
+    client.on('connect', () => {
         // set up a multi command
         client.multi()
             // get reddit
-            .hget('reddit', req.query.country.toUpperCase())
+            .hget('reddit', req.toUpperCase())
             // get newsapi
-            .hget('newsapi', req.query.country.toLowerCase())
+            .hget('newsapi', req.toLowerCase())
             // execute multicommand
             .exec((err, reply) => {
                 // add exit client to exec queue
                 client.quit();
                 if(err) {
                     console.error(`error with incoming call to redis: ${err}`);
-                    return res.status(500).end("redis error, please try again");
+                    return socket.emit('fetchedData', [500, "redis error, please try again"]);
                 }
-                return res.json([
+                return socket.emit('fetchedData', [200, [
                     {source: 'reddit',
                     data: reply[0]},
                     {source: 'newsapi',
                     data: reply[1]}
-                ]);
+                ]]);
             });
     });
     client.on('errer', (err) => {
         console.error(`error with incoming call to redis:\n${err}`);
-        return res.status(500).end("redis error, please try again");
+        return socket.emit('fetchedData', [500, "redis error, please try again"]);
     });
 };
 
-exports.global = function(req, res, next){
+exports.global = function(socket){
     // create connection to redis
     const client = redis.createClient(); 
     client.on('connect', () =>{
@@ -63,19 +63,19 @@ exports.global = function(req, res, next){
             client.quit();
             if(err) {
                 console.error(`error with incoming call to redis: ${err}`);
-                return res.status(500).end("redis error, please try again");
+                return socket.emit('fetchedData', [500, "redis error, please try again"]);
             }
-            return res.json([
+            return socket.emit('fetchedData', [200, [
                 {source: 'reddit',
                 data: reply},
                 {source: 'newsapi',
                 data: null}
-            ]);
+            ]]);
         });
     });
     client.on('errer', (err) => {
         console.error(`error with incoming call to redis:\n${err}`);
-        return res.status(500).end("redis error, please try again");
+        return socket.emit('fetchedData', [500, "redis error, please try again"]);
     });
 };
 

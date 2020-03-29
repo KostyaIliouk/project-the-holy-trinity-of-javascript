@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import socketIOClient from "socket.io-client";
 
 import WorldMap from './components/Map'
 import Content from './components/Content';
@@ -23,16 +24,17 @@ class App extends Component {
 				news: null,
 			}
 		};
+		this.socket = socketIOClient('/');
 	}
 
 	mapOnLoad(data) {
-      	this.setState({
+    this.setState({
 			data: {
 				reddit: data[0].data,
 				news: data[1].data,
 			}
 		});
-	 }
+	}
 
 	mapOnClick(data) {
 		this.setState({
@@ -56,7 +58,8 @@ class App extends Component {
 						<Grid item xs={8} className="map">
 				          <WorldMap lat="43.6532" lng="-79.3832"
 				          			 onClick={this.mapOnClick}
-				          			 onLoad={this.mapOnLoad}
+												 onLoad={this.mapOnLoad}
+												 socket={this.socket}
 				          />
 				        </Grid>
 				        <Grid height={100} item xs className="content">

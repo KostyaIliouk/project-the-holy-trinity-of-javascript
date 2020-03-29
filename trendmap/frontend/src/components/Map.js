@@ -1,15 +1,15 @@
 import React, { createRef, Component } from 'react';
-import { Map, TileLayer, GeoJSON } from 'react-leaflet';
+import { Map, TileLayer, Popup, GeoJSON } from 'react-leaflet';
 
 import countryData from '../countryData.json'
 
 function getColor(continent) {
-    return continent === "Africa" ? '#7fbc41' :
-           continent === "Europe" ? '#d73027' :
-           continent === "North America" ? '#fdae61' :
-           continent === "South America" ? '#f1b6da' :
-           continent === "Asia" ? '#fee090' :
-           continent === "Oceania" ? '#bf812d' :
+    return continent === "Africa" ? '#1c684b' :
+           continent === "Europe" ? '#8a1d1d' :
+           continent === "North America" ? '#2a1c68' :
+           continent === "South America" ? '#681c41' :
+           continent === "Asia" ? '#1c5268' :
+           continent === "Oceania" ? '#68381c' :
            continent === "Antarctica" ? '#fff' :
                                          '#4575b4';
 }
@@ -29,55 +29,66 @@ export default class WorldMap extends Component {
     };
     this.resetHighlight = this.resetHighlight.bind(this);
     this.clickFeature = this.clickFeature.bind(this);
+    this.highlightFeature = this.highlightFeature.bind(this);
+    this.style = this.style.bind(this);
     this.mapRef = createRef();
     this.geoRef = createRef();
+    this.socket = props.socket;
+    this.clickedCountry = "";
+    this.clickedCountryCode = "";
   }
 
   componentDidMount() {
-    fetch(`/api/global`)
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          return [];
-        }
-      })
-      .then(response => {
-          this.state.onLoad(response);
-      });
-      
+    this.socket.emit('global');
+    const onClick = this.state.onClick;
+    this.socket.on('fetchedData', function(data) {
+      if (data[0] === 200) {
+        onClick(data[1]);
+      } else {
+        onClick([]);
+      }
+    });
   }
 
   highlightFeature(e) {
-    const layer = e.target;
-
-    layer.setStyle({
+    if (this.clickedCountry !== e.target) {
+      const layer = e.target;
+      layer.setStyle({
         weight: 4,
         color: '#666',
         dashArray: '',
         fillOpacity: 0.6
-    });
+      });
+      layer.bringToFront();
+    }
   }
 
   resetHighlight(e) {
-    const geo = this.geoRef.current.leafletElement;
-    geo.resetStyle(e.target);
+    if (this.clickedCountry !== e.target) {
+      const geo = this.geoRef.current.leafletElement;
+      geo.resetStyle(e.target);
+      if (this.clickedCountry) {
+        this.clickedCountry.bringToFront();
+      }
+    }
   }
 
   clickFeature(e, countryCode) {
     const map = this.mapRef.current.leafletElement;
+    if (this.clickedCountry) {
+      this.clickedCountry.setStyle(this.style);
+    }
+    this.clickedCountry = e.target;
+    this.clickedCountryCode = countryCode;
     map.fitBounds(e.target.getBounds());
-    fetch(`/api/fetch?country=${countryCode.toLowerCase()}`)
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          return [];
-        }
-      })
-      .then(response => {
-          this.state.onClick(response);
-      });
+    e.target.setStyle({
+      fillColor: '#666',
+      weight: 4,
+      color: '#666',
+      dashArray: '',
+      fillOpacity: 0.6
+    });
+    this.socket.emit('fetch', countryCode);
   }
 
   onEachFeature(feature, layer) {
@@ -89,13 +100,16 @@ export default class WorldMap extends Component {
   }
 
   style(feature) {
-    return {
+    if (this.clickedCountryCode !== feature.properties.ISO_A2) {
+      return {
         fillColor: getColor(feature.properties.CONTINENT),
-        weight: 0.1,
+        weight: 1,
         opacity: 1,
-        color: 'white',
+        color: '#fff',
+        dashArray: '3',
         fillOpacity: 0.6
-    };
+      };
+    }
   }
 
   render() {
