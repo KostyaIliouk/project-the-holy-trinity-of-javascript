@@ -32,7 +32,8 @@
     "express-validator": "^6.4.0",
     "newsapi": "^2.4.0",
     "path": "^0.12.7",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "snoowrap": "^1.21.0"
