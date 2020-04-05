@@ -2,13 +2,9 @@ version: '3'
 services:
     backend:
         build: ./trendmap/backend/
-        ports:
-            - "5000:5000"
     frontend:
         build: ./trendmap/frontend/
         ports:
             - "3000:3000"
     redis:
         build: ./trendmap/redis/
-        ports:
-            - "6379:6379"
