@@ -7,6 +7,10 @@ const file = require('../utilities/file');
 const reddit = require('../apihandler/reddithandler/reddit');
 const newsapi = require('../apihandler/newsapihandler/newsapi');
 
+const connectString = {
+    host: 'redis',
+    port: 6379
+};
 
 /********************
  * Handles /api/fetch call.
@@ -23,7 +27,7 @@ const newsapi = require('../apihandler/newsapihandler/newsapi');
  ********************/
 exports.fetch = function(req, socket){
     // create connection to redis
-    const client = redis.createClient();
+    const client = redis.createClient(connectString);
     client.on('connect', () => {
         // set up a multi command
         client.multi()
@@ -55,7 +59,7 @@ exports.fetch = function(req, socket){
 
 exports.global = function(socket){
     // create connection to redis
-    const client = redis.createClient(); 
+    const client = redis.createClient(connectString); 
     client.on('connect', () =>{
         // set up a multi command
         client.hget('reddit', 'GLOBAL', (err, reply) =>{
@@ -86,9 +90,10 @@ exports.global = function(socket){
  * 
  **********************/
 exports.setupWorkers = () =>{
+    const bullConnect = {redis:{port:6379, host: 'redis'}};
     // create two seperate job queues, one for reddit & one for newsapi
-    let redditQueue = new Bull('reddit-queue');
-    let newsapiQueue = new Bull('newsapi-queue');
+    let redditQueue = new Bull('reddit-queue', bullConnect);
+    let newsapiQueue = new Bull('newsapi-queue', bullConnect);
 
     // create the consumers for each queue, these will populate our redis instance
     consumers(redditQueue, newsapiQueue);
@@ -111,7 +116,7 @@ let consumers = (redditQueue, newsapiQueue) => {
         let key = (job.data.country)? job.data.country.toUpperCase() : 'GLOBAL';
         data
          .then(value =>{
-            let client = redis.createClient();
+            let client = redis.createClient(connectString);
             client.on('connect', () => {
                 client.hmset('reddit', key, value, err=>{
                     if(err) console.error(`r~ hmset error:\n${err}`);
@@ -134,7 +139,7 @@ let consumers = (redditQueue, newsapiQueue) => {
         let key = job.data.country;
         data
          .then(value => {
-            let client = redis.createClient();
+            let client = redis.createClient(connectString);
             client.on('connect', () => {
                 client.hmset('newsapi', key, value, err=>{
                     if(err) console.error(`r~ hmset error:\n${err}`);

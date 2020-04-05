@@ -24,4 +24,4 @@ module.exports = function(io) {
       console.log(`${socket.id} disconnected`);
     });
   });
-}
+};

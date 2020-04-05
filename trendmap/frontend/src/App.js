@@ -7,10 +7,10 @@ import Divider from '@material-ui/core/Divider';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import socketIOClient from "socket.io-client";
 
-import WorldMap from './components/Map'
+import WorldMap from './components/Map';
 import Content from './components/Content';
-import './styles/App.css'
-import './styles/Map.css'
+import './styles/App.css';
+import './styles/Map.css';
 
 class App extends Component {
 
