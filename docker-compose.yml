@@ -1,10 +1,15 @@
 version: '3'
 services:
+    redis:
+        build: ./trendmap/redis/
     backend:
         build: ./trendmap/backend/
+        depends_on: 
+            redis
     frontend:
         build: ./trendmap/frontend/
         ports:
             - "3000:3000"
-    redis:
-        build: ./trendmap/redis/
+        depends_on: 
+            backend
+
