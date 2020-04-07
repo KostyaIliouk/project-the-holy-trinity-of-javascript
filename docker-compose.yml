@@ -3,14 +3,14 @@ services:
     redis:
         build: ./trendmap/redis/
         container_name: redis
-        network:
+        networks:
             - trendmap-docker-net
     backend:
         build: ./trendmap/backend/
         container_name: backend
         depends_on: 
             - redis
-        network:
+        networks:
             - trendmap-docker-net
     frontend:
         build: ./trendmap/frontend/
@@ -19,7 +19,7 @@ services:
             - "80:3000"
         depends_on: 
             - backend
-        network:
+        networks:
             - trendmap-docker-net
     nginx:
         image: nginx:latest
