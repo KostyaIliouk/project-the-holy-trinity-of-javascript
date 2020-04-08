@@ -22,6 +22,8 @@ services:
             - backend
         networks:
             - trendmap-docker-net
+        volumes:
+            - web-root: /user/src/trendmap-frontend/build
     nginx:
         image: nginx:mainline-alpine
         container_name: nginx
