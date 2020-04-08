@@ -15,3 +15,15 @@ Kostya Credits
   - docker documentation: https://docs.docker.com/
   - this video for ngins/letsencrypt: https://www.youtube.com/watch?v=oykl1Ih9pMg
   -  digitalocean documentation: https://www.digitalocean.com/docs/
+  
+Mohammad Credits
+- backend
+  - Reddit
+    Attribution Copyright Notice: Copyright (c) 2006-2015 reddit Inc. All Rights Reserved.
+    Attribution Phrase (not exceeding 10 words): Powered by reddit
+    Attribution URL: http://code.reddit.com
+    Graphic Image as provided in the Covered Code: http://code.reddit.com/reddit_logo.png
+- frontend
+  - Natural Earth
+    - Country json data retrieved from https://www.naturalearthdata.com/downloads/50m-cultural-vectors/
+  - Material UI: https://material-ui.com/
