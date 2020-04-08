@@ -42,7 +42,7 @@ services:
             - certbot-var:/var/lib/letsencrypt
         depends_on: 
             - nginx
-        command: certonly --webroot --webroot-path=/var/www/html --email kostya.iliouk@hotmail.com --agree-tos --no-eff-email --staging -d trendmap.live  -d www.trendmap.live
+        command: certonly --email kostya.iliouk@hotmail.com --agree-tos --no-eff-email --staging -d trendmap.live  -d www.trendmap.live
 volumes:
     certbot-etc:
     certbot-var:
@@ -50,7 +50,7 @@ volumes:
         driver: local
         driver_opts:
             type: none
-            device: /root/dhparam/
+            device: /root/dhparam
             o: bind
     
 networks:

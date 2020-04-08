@@ -5,7 +5,6 @@ server {
 
         location ~ /.well-known/acme-challenge {
           allow all;
-          root /var/www/html;
         }
 
         location / {
@@ -40,7 +39,7 @@ server {
         resolver 8.8.8.8;
 
         location / {
-                try_files $uri @nodejs;
+                try_files $uri @frontend;
         }
 
         location @frontend {
