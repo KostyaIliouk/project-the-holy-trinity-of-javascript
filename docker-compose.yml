@@ -3,11 +3,13 @@ services:
     redis:
         build: ./trendmap/redis/
         container_name: redis
+        restart: unless-stopped
         networks:
             - trendmap-docker-net
     backend:
         build: ./trendmap/backend/
         container_name: backend
+        restart: unless-stopped
         depends_on: 
             - redis
         networks:
@@ -15,21 +17,22 @@ services:
     frontend:
         build: ./trendmap/frontend/
         container_name: frontend
+        restart: unless-stopped
         depends_on: 
             - backend
         networks:
             - trendmap-docker-net
     nginx:
-        image: nginx:latest
+        image: nginx:mainline-alpine
         container_name: nginx
+        restart: unless-stopped
         ports:
             - "80:80"
-            - "443:443"
         volumes:
+            - web-root:/var/www/html
             - ./server/nginx-conf:/etc/nginx/conf.d
             - certbot-etc:/etc/letsencrypt
             - certbot-var:/var/lib/letsencrypt
-            - dhparam:/etc/ssl/certs
         depends_on:
             - frontend
         networks:
@@ -40,18 +43,14 @@ services:
         volumes:
             - certbot-etc:/etc/letsencrypt
             - certbot-var:/var/lib/letsencrypt
-        depends_on: 
-            - nginx
-        command: certonly --email kostya.iliouk@hotmail.com --agree-tos --no-eff-email --staging -d trendmap.live  -d www.trendmap.live
+            - web-root:/var/www/html
+        depends_on:
+            - webserver
+        command: certonly --webroot --webroot-path=/var/www/html --email kostya.iliouk@hotmail.com --agree-tos --no-eff-email --staging -d trendmap.live  -d www.trendmap.live
 volumes:
     certbot-etc:
     certbot-var:
-    dhparam:
-        driver: local
-        driver_opts:
-            type: none
-            device: /root/dhparam
-            o: bind
+    web-root:
     
 networks:
     trendmap-docker-net:
