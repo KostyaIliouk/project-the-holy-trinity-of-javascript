@@ -19,10 +19,10 @@ Kostya Credits
 Mohammad Credits
 - backend
   - Reddit
-    Attribution Copyright Notice: Copyright (c) 2006-2015 reddit Inc. All Rights Reserved.
-    Attribution Phrase (not exceeding 10 words): Powered by reddit
-    Attribution URL: http://code.reddit.com
-    Graphic Image as provided in the Covered Code: http://code.reddit.com/reddit_logo.png
+    - Attribution Copyright Notice: Copyright (c) 2006-2015 reddit Inc. All Rights Reserved.
+    - Attribution Phrase (not exceeding 10 words): Powered by reddit
+    - Attribution URL: http://code.reddit.com
+    - Graphic Image as provided in the Covered Code: http://code.reddit.com/reddit_logo.png
 - frontend
   - Natural Earth
     - Country json data retrieved from https://www.naturalearthdata.com/downloads/50m-cultural-vectors/
