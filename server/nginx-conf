@@ -5,7 +5,7 @@ server {
         root /var/www/html;
         index index.html index.htm index.nginx-debian.html;
 
-        server_name example.com www.example.com;
+        server_name trendmap.live www.trendmap.live;
 
         location / {
                 proxy_pass http://frontend:3000;
