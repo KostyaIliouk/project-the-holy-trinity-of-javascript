@@ -15,6 +15,7 @@ Kostya Credits
   - docker documentation: https://docs.docker.com/
   - this video for ngins/letsencrypt: https://www.youtube.com/watch?v=oykl1Ih9pMg
   -  digitalocean documentation: https://www.digitalocean.com/docs/
+  -  this tutorial: https://www.digitalocean.com/community/tutorials/how-to-secure-a-containerized-node-js-application-with-nginx-let-s-encrypt-and-docker-compose
   
 Mohammad Credits
 - backend
