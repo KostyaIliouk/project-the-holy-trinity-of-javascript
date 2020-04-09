@@ -9,7 +9,3 @@
   - run local instance of redis
 - run `npm install` to install all needed dependencies
 - run `node app.js` or `nodemon app.js`
-
-## Credits
-
-- 
