@@ -8,9 +8,9 @@ services:
             - trendmap-docker-net
     backend:
         environment: 
-            - NEWSAPI_KEY= ${NEWSAPI_KEY}
-            - REDDIT_CLIENTID= ${REDDIT_CLIENTID}
-            - REDDIT_CLIENTSECRET= ${REDDIT_CLIENTSECRET}
+            - NEWSAPI_KEY=${NEWSAPI_KEY}
+            - REDDIT_CLIENTID=${REDDIT_CLIENTID}
+            - REDDIT_CLIENTSECRET=${REDDIT_CLIENTSECRET}
         build: ./trendmap/backend/
         container_name: backend
         restart: unless-stopped
@@ -22,7 +22,7 @@ services:
         build: 
             context: ./trendmap/frontend/
             args: 
-                REACT_APP_LEAFLET_ACCESS_TOKEN: ${REACT_APP_LEAFLET_ACCESS_TOKEN}
+                REACT_APP_LEAFLET_ACCESS_TOKEN:${REACT_APP_LEAFLET_ACCESS_TOKEN}
         container_name: frontend
         depends_on: 
             - backend
