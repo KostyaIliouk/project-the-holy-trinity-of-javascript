@@ -7,8 +7,8 @@ const file = require('../../utilities/file');
 var reddit;
 snoowrap.fromApplicationOnlyAuth({
 	userAgent: 'trendmap',
-	clientId: '26quE0VO8RS1rw',
-	clientSecret: '6hiXyTJf-ySLnxdh_7Gw_FbBtu0',
+	clientId: process.env.REDDIT_CLIENTID,
+	clientSecret: process.env.REDDIT_CLIENTSECRET,
 	grantType: snoowrap.grantType.CLIENT_CREDENTIALS
 }).then(r => reddit = r);
 

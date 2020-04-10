@@ -6,14 +6,16 @@ const file = require('../../utilities/file');
 
 // get saved api key
 // create api connection
-let newsapi = {};
-file.readFile('./apihandler/newsapihandler/secret/api.key')
-    .then(function(value){
-        newsapi.api = new NEWSAPI(value);
-    }, function(err){
-        console.error("API key for NewsAPI is not present. Empty key defaulted.");
-        console.error(err);
-});
+let newsapi ={
+    api : new NEWSAPI(process.env.NEWSAPI_KEY)
+};
+// file.readFile('./apihandler/newsapihandler/secret/api.key')
+//     .then(function(value){
+//         newsapi.api = new NEWSAPI(value);
+//     }, function(err){
+//         console.error("API key for NewsAPI is not present. Empty key defaulted.");
+//         console.error(err);
+// });
 
 // get supported countries object
 file.readFile(`./apihandler/newsapihandler/files/newsapi-support-list.json`)
