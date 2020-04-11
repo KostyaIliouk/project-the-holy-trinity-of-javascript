@@ -109,11 +109,6 @@ export default function Content(props) {
 	const [data, setData] = useState(props.data);
 	useEffect( () => {setData(props.data)}, [props.data]);
 	const [value, setValue] = useState((data.news == null) ? 1 : 0);
-	
-
-	
-
-		
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);

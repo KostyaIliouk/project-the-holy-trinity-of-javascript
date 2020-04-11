@@ -9,8 +9,10 @@ import socketIOClient from "socket.io-client";
 
 import WorldMap from './components/Map';
 import Content from './components/Content';
+import Credits from './components/Credits';
 import './styles/App.css';
 import './styles/Map.css';
+import './styles/Credits.css';
 
 class App extends Component {
 
@@ -46,6 +48,7 @@ class App extends Component {
 	}
 
 	render() {
+		const CreditsButton = <Typography variant="h1" component={'div'} className="nav-item nav-link"><a href='#'>Credits</a></Typography>;
 		return (
 			<Box display="flex"
 				 flexDirection="column"
@@ -56,34 +59,32 @@ class App extends Component {
 				<Box width="100%" flexGrow={1} display="flex">
 					<Grid container>
 						<Grid item xs={8} className="map">
-				          <WorldMap lat="43.6532" lng="-79.3832"
-				          			 onClick={this.mapOnClick}
-												 onLoad={this.mapOnLoad}
-												 socket={this.socket}
-				          />
-				        </Grid>
-				        <Grid height={100} item xs className="content">
-				          <Content key={this.state.data} data={this.state.data} />
-				        </Grid>
-			        </Grid>
-		        </Box>
-		        <Paper square className="nav" style={{ backgroundColor: "#323234", color: "white" }} elevation={4}>
-		        	<Typography variant="h1" component={'div'} className="app-title">TrendMap</Typography>
-		        	<Box className="filler" flexGrow={2}/>
-	        		<Typography variant="h1" component={'div'} className="nav-item nav-link">
-	        				<a href="localhost:3000">Credits</a>
-	        		</Typography>
-	        		<Divider orientation="vertical" flexItem/>
-	        		<Typography variant="h1" component={'div'} className="nav-item nav-link">
-	        			<a href="https://github.com/UTSCC09/project-the-holy-trinity-of-javascript/issues"
-	        			   target="_blank"
-	        			   rel="noopener noreferrer">
-	        			   Report Issue <ErrorOutlineIcon />
-	        			</a>
-	        		</Typography>
+				      <WorldMap lat="43.6532" lng="-79.3832"
+				          			onClick={this.mapOnClick}
+												onLoad={this.mapOnLoad}
+												socket={this.socket}
+				      />
+				    </Grid>
+				    <Grid height={100} item xs className="content">
+				      <Content key={this.state.data} data={this.state.data} />
+				    </Grid>
+			    </Grid>
+		    </Box>
+		    <Paper square className="nav" style={{ backgroundColor: "#323234", color: "white" }} elevation={4}>
+		      <Typography variant="h1" component={'div'} className="app-title">TrendMap</Typography>
+		      <Box className="filler" flexGrow={2}/>
+					<Credits CreditsButton={CreditsButton}/>
+	        <Divider orientation="vertical" flexItem/>
+	        <Typography variant="h1" component={'div'} className="nav-item nav-link">
+	        	<a href="https://github.com/UTSCC09/project-the-holy-trinity-of-javascript/issues"
+	        		target="_blank"
+	        		rel="noopener noreferrer">
+	        		Report Issue <ErrorOutlineIcon/>
+	        	</a>
+	        </Typography>
 				</Paper>
-	        </Box>
-			);
+	    </Box>
+		);
 	}
 
 }

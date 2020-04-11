@@ -1,0 +1,16 @@
+.credits {
+  display: flex;
+  flex-direction: column;
+  color: #666;
+}
+
+.credits-header {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+  border-bottom: dotted;
+}
+
+.credits-body {
+  margin-left: 10px;
+}
