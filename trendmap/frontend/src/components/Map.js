@@ -116,7 +116,7 @@ export default class WorldMap extends Component {
     // <NewsList data={this.state.news}/>
     // <RedditList data={this.state.reddit}/>
     const position = [this.state.lat, this.state.lng];
-    const mapStyle = "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token="
+    const mapStyle = "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=";
     const mapUrl = mapStyle + process.env.REACT_APP_LEAFLET_ACCESS_TOKEN;
 
     return (
