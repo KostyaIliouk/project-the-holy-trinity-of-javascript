@@ -21,8 +21,8 @@ services:
     frontend:
         build: 
             context: ./trendmap/frontend/
-            args: 
-                REACT_APP_LEAFLET_ACCESS_TOKEN: ${LEAFLET_ACCESS_TOKEN}
+            environment: 
+                - REACT_APP_LEAFLET_ACCESS_TOKEN=${LEAFLET_ACCESS_TOKEN}
         container_name: frontend
         depends_on: 
             - backend
