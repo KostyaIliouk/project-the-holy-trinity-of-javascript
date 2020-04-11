@@ -11,3 +11,6 @@ npm-debug.log
 
 
 
+.gitsecret/keys/random_seed
+!*.secret
+.env
