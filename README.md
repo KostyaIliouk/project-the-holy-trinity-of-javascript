@@ -1,6 +1,6 @@
 # The Holy Trinity of JavaScript
 
-## [trendmap.live](https://trendmap.live)
+## trendmap.live (decomissioned)
 ## [demo video](https://www.youtube.com/watch?v=1IyRNwhjpbg)
 
 ## Members
